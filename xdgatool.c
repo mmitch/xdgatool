@@ -18,22 +18,27 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/extensions/Xxf86dga.h>
 
-int
-main(void)
+/* get X connection */
+Display*
+getXConnection(void)
 {
-	
-	/* get X connection */
-
 	Display *dpy;
 	if (!(dpy = XOpenDisplay(0)))
 	{
 		fprintf(stderr, "can't open X display\n");
-		return 1;
+		exit(1);
 	}
+	return dpy;
+}
 
+/* print available modes */
+void
+printDGAModes(Display *dpy)
+{
 	/* query available modes */
 	int modes;
 	XDGAMode *dgamodes = XDGAQueryModes(dpy, 0, &modes);
@@ -56,6 +61,13 @@ main(void)
 		}
 	}
 	XFree(dgamodes);
+}
 
+/* main program */
+int
+main(void)
+{
+	Display *dpy = getXConnection();
+	printDGAModes(dpy);
 	return 0;
 }
