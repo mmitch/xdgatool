@@ -20,6 +20,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <X11/Xlib.h>
 #include <X11/extensions/Xxf86dga.h>
 
@@ -101,6 +102,7 @@ main(int argc, char**argv)
 		if (*argv[1] != '\0' && *endptr == '\0' && modenum >= 0)
 		{
 			setDGAMode(modenum);
+			sleep(5);
 		}
 		else
 		{
