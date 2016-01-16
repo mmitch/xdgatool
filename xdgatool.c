@@ -17,6 +17,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <X11/Xlib.h>
@@ -63,11 +64,43 @@ printDGAModes(Display *dpy)
 	XFree(dgamodes);
 }
 
+/* print help text and exit */
+void
+showHelp(void)
+{
+	printf("usage:\n"
+	       "  xdgatool              - list all available XDGA modes\n"
+	       "  xdgatool <modenum>    - activate XDGA mode <modenum>\n"
+		);
+	exit(2);
+}
+
 /* main program */
 int
-main(void)
+main(int argc, char**argv)
 {
-	Display *dpy = getXConnection();
-	printDGAModes(dpy);
+	if (argc > 2)
+	{
+		showHelp();
+	}
+	else if (argc == 2)
+	{
+		char *endptr;
+		intmax_t modenum = strtoimax(argv[1], &endptr, 10);
+		if (*argv[1] != '\0' && *endptr == '\0' && modenum >= 0)
+		{
+			// set mode
+		}
+		else
+		{
+			showHelp();
+		}
+	}
+	else
+	{
+		Display *dpy = getXConnection();
+		printDGAModes(dpy);
+	}
+
 	return 0;
 }
