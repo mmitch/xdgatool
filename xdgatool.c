@@ -40,7 +40,6 @@ getXConnection(void)
 void
 printDGAModes(Display *dpy)
 {
-	/* query available modes */
 	int modes;
 	XDGAMode *dgamodes = XDGAQueryModes(dpy, 0, &modes);
 	if (dgamodes)
@@ -62,6 +61,14 @@ printDGAModes(Display *dpy)
 		}
 	}
 	XFree(dgamodes);
+}
+
+/* set a mode */
+void
+setDGAMode(int mode, Display *dpy)
+{
+	XDGADevice *device = XDGASetMode(dpy, 0, mode);
+	XFree(device);
 }
 
 /* print help text and exit */
@@ -89,7 +96,8 @@ main(int argc, char**argv)
 		intmax_t modenum = strtoimax(argv[1], &endptr, 10);
 		if (*argv[1] != '\0' && *endptr == '\0' && modenum >= 0)
 		{
-			// set mode
+			Display *dpy = getXConnection();
+			setDGAMode(modenum, dpy);
 		}
 		else
 		{
